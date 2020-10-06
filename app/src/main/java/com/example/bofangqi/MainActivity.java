@@ -69,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //                    mediaPlayer.stop();
-                    test(num);
+//                    test(num);
+                Toast.makeText(MainActivity.this, mediaPlayer.isPlaying()+"", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -102,32 +103,6 @@ public class MainActivity extends AppCompatActivity {
                 tv_2.setText(calculateTime(dangqian));
                 tv_3.setText(calculateTime(zong));
                 mediaPlayer.start();
-            }
-        });
-
-        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                String bf = sp1.getSelectedItem().toString();
-                switch (bf){
-                    case "单曲循环":
-                        mediaPlayer.start();
-                        break;
-                    case "顺序播放":
-                        if (num == 4)
-                            num = 0;
-                        else
-                            num++;
-                        test(num);
-                        mediaPlayer.start();
-                        break;
-                    case "随机播放":
-                        num = (int) (Math.random()*4);
-                        Log.d("num:", num+"");
-                        test(num);
-                        mediaPlayer.start();
-                        break;
-                }
             }
         });
 
@@ -222,7 +197,36 @@ public class MainActivity extends AppCompatActivity {
             mediaPlayer.stop();
         }
         mediaPlayer = MediaPlayer.create(this, dizhi[i]);
-
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                jieshu();
+            }
+        });
     }
 
+
+    public void jieshu(){
+        Toast.makeText(MainActivity.this, "播放结束", Toast.LENGTH_SHORT).show();
+        String bf = sp1.getSelectedItem().toString();
+        switch (bf){
+            case "单曲循环":
+                mediaPlayer.start();
+                break;
+            case "顺序播放":
+                if (num == 4)
+                    num = 0;
+                else
+                    num++;
+                test(num);
+                mediaPlayer.start();
+                break;
+            case "随机播放":
+                num = (int) (Math.random()*4);
+                Log.d("num:", num+"");
+                test(num);
+                mediaPlayer.start();
+                break;
+        }
+    }
 }
